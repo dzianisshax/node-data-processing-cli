@@ -1,6 +1,11 @@
+import { initCwd, getCwd } from './utils/pathResolver.js';
 import readline from 'readline';
-import { stdin, stdout, cwd, chdir, exit } from 'node:process';
-import { resolve } from 'node:path';
+import { fileURLToPath } from 'url';
+import { stdin, stdout, exit } from 'node:process';
+import { moveUp, moveToDir, listFiles } from './navigation.js';
+
+// Initialize the custom CWD once at startup.
+initCwd(fileURLToPath(new URL('.', import.meta.url)));
 
 // Initialize the readline interface
 const rl = readline.createInterface({
@@ -10,7 +15,7 @@ const rl = readline.createInterface({
 });
 
 console.log('Welcome to Data Processing CLI!');
-console.log(`You are currently in ${cwd()}`);
+console.log(`You are currently in ${getCwd()}`);
 
 // Display the initial prompt
 rl.prompt();
@@ -24,16 +29,15 @@ rl.on('line', async (line) => {
 
   switch (command) {
     case 'up':
-      if (cwd() === resolve(cwd(), '..')) {
-        // If already in the root directory, does nothing (no error)
-        break;
-      }
+      moveUp();
+      break;
 
-      // Moves up one directory level from the current working directory
-      chdir('..');
+    case 'cd':
+      await moveToDir(args[0]);
+      break;
 
-      // After successful navigation, prints the new current working directory path
-      console.log('The new current working directory path:', cwd());
+    case 'ls':
+      await listFiles();
       break;
 
     case '.exit':
