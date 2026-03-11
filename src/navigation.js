@@ -1,42 +1,43 @@
-import {
-  isCwdAlreadyRoot,
-  getCwd,
-  changeCwd,
-  resolvePath,
-} from './utils/pathResolver.js';
+import { resolvePath } from './utils/pathResolver.js';
 import { stat, readdir } from 'node:fs/promises';
 
 /**
  * Move up one directory level.
+ * * @param {string} cwd - Current working directory.
+ * * @returns {string} The absolute path of the current working directory.
  */
-export function moveUp() {
-  // If already in the root directory, does nothing (no error)
-  if (!isCwdAlreadyRoot()) {
-    // Moves up one directory level from the current working directory
-    changeCwd('..');
+export function moveUp(cwd) {
+  const newPath = resolvePath(cwd, '..');
 
+  if (cwd !== newPath) {
     // After successful navigation, prints the new current working directory path
-    console.log('The new current working directory:', getCwd());
+    console.log('The new current working directory:', newPath);
+    return newPath;
+  } else {
+    // If already in the root directory, does nothing (no error)
+    return cwd;
   }
 }
 
 /**
  * Navigates to the specified directory.
+ * * @param {string} cwd - Current working directory.
  * * @param {string} pathToDirectory - Relative or absolute path to navigate to.
+ * * @returns {string} The absolute path of the current working directory.
  */
-export async function moveToDir(pathToDirectory) {
+export async function moveToDir(cwd, pathToDirectory) {
   // Path is required -  do nothing
   if (!pathToDirectory) {
-    return;
+    return cwd;
   }
 
-  const absolutePath = resolvePath(pathToDirectory);
+  const newPath = resolvePath(cwd, pathToDirectory);
 
   try {
-    const stats = await stat(absolutePath);
+    const stats = await stat(newPath);
     if (stats.isDirectory()) {
-      changeCwd(absolutePath);
-      console.log('The new current working directory path:', getCwd());
+      console.log('The new current working directory path:', newPath);
+      return newPath;
     } else {
       // If path is not a directory
       console.log('Operation failed');
@@ -46,16 +47,18 @@ export async function moveToDir(pathToDirectory) {
     if (error.code === 'ENOENT') {
       console.log('Operation failed');
     }
+    return cwd;
   }
 }
 
 /**
  * List files and directories in current directory.
+ * * @param {string} cwd - Current working directory.
  */
-export async function listFiles() {
+export async function listFiles(cwd) {
   try {
     // Read directory contents, including file type information
-    const entries = await readdir(getCwd(), { withFileTypes: true });
+    const entries = await readdir(cwd, { withFileTypes: true });
 
     // Separate the entries into folders and files
     const folders = entries.filter((entry) => entry.isDirectory());
