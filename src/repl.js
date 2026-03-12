@@ -2,6 +2,7 @@ import readline from 'readline';
 import { stdin, stdout, exit } from 'node:process';
 import { moveUp, moveToDir, listFiles } from './navigation.js';
 import { parseArgs } from './utils/argParser.js';
+import { convertCsvToJson } from './commands/csvToJson.js';
 
 export function startRepl(state) {
   // Initialize the readline interface
@@ -35,6 +36,10 @@ export function startRepl(state) {
 
       case 'ls':
         await listFiles(state.cwd);
+        break;
+
+      case 'csv-to-json':
+        await convertCsvToJson(state.cwd, options);
         break;
 
       case '.exit':
