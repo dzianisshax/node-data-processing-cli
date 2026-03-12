@@ -3,41 +3,37 @@ import { stat, readdir } from 'node:fs/promises';
 
 /**
  * Move up one directory level.
- * * @param {string} cwd - Current working directory.
- * * @returns {string} The absolute path of the current working directory.
+ * * @param {any} state - State object.
  */
-export function moveUp(cwd) {
-  const newPath = resolvePath(cwd, '..');
+export function moveUp(state) {
+  const newPath = resolvePath(state.cwd, '..');
 
-  if (cwd !== newPath) {
+  if (state.cwd !== newPath) {
     // After successful navigation, prints the new current working directory path
     console.log('The new current working directory:', newPath);
-    return newPath;
-  } else {
-    // If already in the root directory, does nothing (no error)
-    return cwd;
+    state.cwd = newPath;
   }
+  // If already in the root directory, does nothing (no error)
 }
 
 /**
  * Navigates to the specified directory.
- * * @param {string} cwd - Current working directory.
+ * * @param {any} state - State object.
  * * @param {string} pathToDirectory - Relative or absolute path to navigate to.
- * * @returns {string} The absolute path of the current working directory.
  */
-export async function moveToDir(cwd, pathToDirectory) {
+export async function moveToDir(state, pathToDirectory) {
   // Path is required -  do nothing
   if (!pathToDirectory) {
-    return cwd;
+    return;
   }
 
-  const newPath = resolvePath(cwd, pathToDirectory);
+  const newPath = resolvePath(state.cwd, pathToDirectory);
 
   try {
     const stats = await stat(newPath);
     if (stats.isDirectory()) {
       console.log('The new current working directory path:', newPath);
-      return newPath;
+      state.cwd = newPath;
     } else {
       // If path is not a directory
       console.log('Operation failed');
@@ -47,7 +43,6 @@ export async function moveToDir(cwd, pathToDirectory) {
     if (error.code === 'ENOENT') {
       console.log('Operation failed');
     }
-    return cwd;
   }
 }
 

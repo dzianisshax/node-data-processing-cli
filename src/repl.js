@@ -1,6 +1,7 @@
 import readline from 'readline';
 import { stdin, stdout, exit } from 'node:process';
 import { moveUp, moveToDir, listFiles } from './navigation.js';
+import { parseArgs } from './utils/argParser.js';
 
 export function startRepl(state) {
   // Initialize the readline interface
@@ -10,27 +11,26 @@ export function startRepl(state) {
     prompt: '> ',
   });
 
-  // Display the initial welcome
-  console.log('Welcome to Data Processing CLI!');
-  console.log(`You are currently in ${state.cwd}`);
-
   // Display the initial prompt
   rl.prompt();
 
   // Listen for user input
   rl.on('line', async (line) => {
-    // Split entered string on command and args
-    const input = line.trim().split(' ');
-    const command = input[0].toLowerCase();
-    const args = input.slice(1);
+    // Parse a command line string
+    const parsed = parseArgs(line);
+    if (!parsed) {
+      rl.prompt();
+      return;
+    }
+    const { command, args, options } = parsed;
 
     switch (command) {
       case 'up':
-        state.cwd = moveUp(state.cwd);
+        moveUp(state);
         break;
 
       case 'cd':
-        state.cwd = await moveToDir(state.cwd, args[0]);
+        await moveToDir(state, args[0]);
         break;
 
       case 'ls':
