@@ -3,8 +3,8 @@ import { resolvePath } from '../utils/pathResolver.js';
 
 /**
  * Convert a JSON file (array of objects) to a CSV file.
- * * @param {string} cwd - Current working directory.
- * * @param {any} options - Path to the input JSON file and path to the output CSV file.
+ * @param {string} cwd - Current working directory.
+ * @param {any} options - Path to the input JSON file and path to the output CSV file.
  */
 export async function convertJsonToCsv(cwd, options) {
   const { input, output } = options;

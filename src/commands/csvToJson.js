@@ -71,8 +71,8 @@ class CsvToJsonTransform extends Transform {
 
 /**
  * Convert a CSV file to a JSON file.
- * * @param {string} cwd - Current working directory.
- * * @param {any} options - Path to the input CSV file and path to the output JSON file.
+ * @param {string} cwd - Current working directory.
+ * @param {any} options - Path to the input CSV file and path to the output JSON file.
  */
 export async function convertCsvToJson(cwd, options) {
   const { input, output } = options;
