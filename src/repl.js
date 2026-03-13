@@ -4,6 +4,7 @@ import { moveUp, moveToDir, listFiles } from './navigation.js';
 import { parseArgs } from './utils/argParser.js';
 import { convertCsvToJson } from './commands/csvToJson.js';
 import { convertJsonToCsv } from './commands/jsonToCsv.js';
+import { count } from './commands/count.js';
 
 export function startRepl(state) {
   // Initialize the readline interface
@@ -45,6 +46,10 @@ export function startRepl(state) {
 
       case 'json-to-csv':
         await convertJsonToCsv(state.cwd, options);
+        break;
+
+      case 'count':
+        await count(state.cwd, options);
         break;
 
       case '.exit':
