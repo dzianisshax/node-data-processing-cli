@@ -29,11 +29,11 @@ export async function encrypt(cwd, options) {
     const inputPath = resolvePath(cwd, input);
     outputPath = resolvePath(cwd, output);
 
-    // Open the input file handle FIRST.
-    // If the file doesn't exist or isn't readable, this throws immediately
-    let inputHandle;
+    // Verify input file exists and is readable.
+    // We open and immediately close it just to trigger an early throw if missing.
     try {
-      inputHandle = await open(inputPath, 'r');
+      const inputHandle = await open(inputPath, 'r');
+      await inputHandle.close();
     } catch (err) {
       throw new Error('Operation failed: Input file is missing or unreadable.');
     }
