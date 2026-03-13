@@ -3,7 +3,7 @@ import { stat, readdir } from 'node:fs/promises';
 
 /**
  * Move up one directory level.
- * * @param {any} state - State object.
+ * @param {any} state - State object.
  */
 export function moveUp(state) {
   const newPath = resolvePath(state.cwd, '..');
@@ -18,8 +18,8 @@ export function moveUp(state) {
 
 /**
  * Navigates to the specified directory.
- * * @param {any} state - State object.
- * * @param {string} pathToDirectory - Relative or absolute path to navigate to.
+ * @param {any} state - State object.
+ * @param {string} pathToDirectory - Relative or absolute path to navigate to.
  */
 export async function moveToDir(state, pathToDirectory) {
   // Path is required -  do nothing
@@ -48,7 +48,7 @@ export async function moveToDir(state, pathToDirectory) {
 
 /**
  * List files and directories in current directory.
- * * @param {string} cwd - Current working directory.
+ * @param {string} cwd - Current working directory.
  */
 export async function listFiles(cwd) {
   try {
