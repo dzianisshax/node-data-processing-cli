@@ -7,6 +7,7 @@ import { convertJsonToCsv } from './commands/jsonToCsv.js';
 import { count } from './commands/count.js';
 import { hash } from './commands/hash.js';
 import { hashCompare } from './commands/hashCompare.js';
+import { encrypt } from './commands/encrypt.js';
 
 export function startRepl(state) {
   // Initialize the readline interface
@@ -60,6 +61,10 @@ export function startRepl(state) {
 
       case 'hash-compare':
         await hashCompare(state.cwd, options);
+        break;
+
+      case 'encrypt':
+        await encrypt(state.cwd, options);
         break;
 
       case '.exit':
