@@ -11,9 +11,9 @@ const SUPPORTED_ALGORITHMS = ['sha256', 'md5', 'sha512'];
  * @param {any} options - The path to the input file, hash algorithm and --save flag.
  */
 export async function hash(cwd, options) {
-  try {
-    const { input, algorithm = 'sha256', save } = options;
+  const { input, algorithm = 'sha256', save } = options;
 
+  try {
     // Input is required, and algorithm must be one of the supported three
     if (!input || !SUPPORTED_ALGORITHMS.includes(algorithm)) {
       throw new Error('Invalid arguments or unsupported algorithm');
@@ -41,7 +41,7 @@ export async function hash(cwd, options) {
 
     // Write hash to <inputFilename>.<algorithm> if --save is provided
     if (save) {
-      await writeFile(`${input}.${algorithm}`, digest);
+      await writeFile(`${inputPath}.${algorithm}`, digest);
     }
   } catch (error) {
     // Any failure (missing file, bad algorithm, write error)
