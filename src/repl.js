@@ -5,6 +5,7 @@ import { parseArgs } from './utils/argParser.js';
 import { convertCsvToJson } from './commands/csvToJson.js';
 import { convertJsonToCsv } from './commands/jsonToCsv.js';
 import { count } from './commands/count.js';
+import { hash } from './commands/hash.js';
 
 export function startRepl(state) {
   // Initialize the readline interface
@@ -50,6 +51,10 @@ export function startRepl(state) {
 
       case 'count':
         await count(state.cwd, options);
+        break;
+
+      case 'hash':
+        await hash(state.cwd, options);
         break;
 
       case '.exit':
