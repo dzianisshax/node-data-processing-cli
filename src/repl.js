@@ -9,6 +9,7 @@ import { hash } from './commands/hash.js';
 import { hashCompare } from './commands/hashCompare.js';
 import { encrypt } from './commands/encrypt.js';
 import { decrypt } from './commands/decrypt.js';
+import { logStats } from './commands/logStats.js'
 
 export function startRepl(state) {
   // Initialize the readline interface
@@ -70,6 +71,10 @@ export function startRepl(state) {
 
       case 'decrypt':
         await decrypt(state.cwd, options);
+        break;
+
+        case 'log-stats':
+        await logStats(state.cwd, options);
         break;
 
       case '.exit':
